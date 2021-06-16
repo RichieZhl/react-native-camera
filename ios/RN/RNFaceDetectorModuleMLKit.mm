@@ -1,12 +1,19 @@
 #import "RNFaceDetectorModuleMLKit.h"
+#import <React/RCTBridgeModule.h>
+#import <React/RCTBridge.h>
 #if __has_include(<FirebaseMLVision/FirebaseMLVision.h>)
 #import "RNFileSystem.h"
 #import "RNImageUtils.h"
-#import <React/RCTBridgeModule.h>
 
 static const NSString *kModeOptionName = @"mode";
 static const NSString *kDetectLandmarksOptionName = @"detectLandmarks";
 static const NSString *kRunClassificationsOptionName = @"runClassifications";
+
+@interface RNFaceDetectorModuleMLKit ()
+
+@property (nonatomic, strong) RCTBridge *bridge;
+
+@end
 
 @implementation RNFaceDetectorModuleMLKit
 
@@ -119,6 +126,12 @@ RCT_EXPORT_METHOD(detectFaces:(nonnull NSDictionary *)options
 
 @end
 #else
+@interface RNFaceDetectorModuleMLKit ()
+
+@property (nonatomic, strong) RCTBridge *bridge;
+
+@end
+
 @implementation RNFaceDetectorModuleMLKit
 
 @synthesize bridge = _bridge;

@@ -367,8 +367,8 @@ RCT_REMAP_METHOD(takePicture,
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNCamera *> *viewRegistry) {
-        RNCamera *view = viewRegistry[reactTag];
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RNCamera *view = (RNCamera *)viewRegistry[reactTag];
         if (![view isKindOfClass:[RNCamera class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting RNCamera, got: %@", view);
         } else {
@@ -425,8 +425,8 @@ RCT_REMAP_METHOD(record,
     reject(@"E_RECORDING_FAILED", @"Video recording is not supported on a simulator.", nil);
     return;
 #endif
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNCamera *> *viewRegistry) {
-        RNCamera *view = viewRegistry[reactTag];
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RNCamera *view = (RNCamera *)viewRegistry[reactTag];
         if (![view isKindOfClass:[RNCamera class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting RNCamera, got: %@", view);
         } else {
@@ -440,8 +440,8 @@ RCT_EXPORT_METHOD(resumePreview:(nonnull NSNumber *)reactTag)
 #if TARGET_IPHONE_SIMULATOR
     return;
 #endif
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNCamera *> *viewRegistry) {
-        RNCamera *view = viewRegistry[reactTag];
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RNCamera *view = (RNCamera *)viewRegistry[reactTag];
         if (![view isKindOfClass:[RNCamera class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting RNCamera, got: %@", view);
         } else {
@@ -455,8 +455,8 @@ RCT_EXPORT_METHOD(pausePreview:(nonnull NSNumber *)reactTag)
 #if TARGET_IPHONE_SIMULATOR
     return;
 #endif
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNCamera *> *viewRegistry) {
-        RNCamera *view = viewRegistry[reactTag];
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RNCamera *view = (RNCamera *)viewRegistry[reactTag];
         if (![view isKindOfClass:[RNCamera class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting RNCamera, got: %@", view);
         } else {
@@ -467,8 +467,8 @@ RCT_EXPORT_METHOD(pausePreview:(nonnull NSNumber *)reactTag)
 
 RCT_REMAP_METHOD(stopRecording, reactTag:(nonnull NSNumber *)reactTag)
 {
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNCamera *> *viewRegistry) {
-        RNCamera *view = viewRegistry[reactTag];
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RNCamera *view = (RNCamera *)viewRegistry[reactTag];
         if (![view isKindOfClass:[RNCamera class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting RNCamera, got: %@", view);
         } else {
@@ -542,8 +542,8 @@ RCT_EXPORT_METHOD(isRecording:(nonnull NSNumber *)reactTag
         reject(@"E_IS_RECORDING_FAILED", @"Video recording is not supported on a simulator.", nil);
         return;
     #endif
-        [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNCamera *> *viewRegistry) {
-            RNCamera *view = viewRegistry[reactTag];
+        [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+            RNCamera *view = (RNCamera *)viewRegistry[reactTag];
             if (![view isKindOfClass:[RNCamera class]]) {
                 RCTLogError(@"Invalid view returned from registry, expecting RNCamera, got: %@", view);
             } else {

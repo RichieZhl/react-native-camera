@@ -46,7 +46,7 @@
         case UIInterfaceOrientationLandscapeLeft:
             return AVCaptureVideoOrientationLandscapeLeft;
         default:
-            return 0;
+            return AVCaptureVideoOrientationPortrait;
     }
 }
 

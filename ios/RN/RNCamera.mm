@@ -317,7 +317,7 @@ BOOL _sessionInterrupted = NO;
         captureDevice = [RNCameraUtils deviceWithCameraId:self.cameraId];
     }
     else{
-        captureDevice = [RNCameraUtils deviceWithMediaType:AVMediaTypeVideo preferringPosition:self.presetCamera];
+        captureDevice = [RNCameraUtils deviceWithMediaType:AVMediaTypeVideo preferringPosition:(AVCaptureDevicePosition)self.presetCamera];
     }
     return captureDevice;
 
@@ -341,7 +341,7 @@ BOOL _sessionInterrupted = NO;
 {
     // Default video quality AVCaptureSessionPresetHigh if non is provided
     AVCaptureSessionPreset preset =
-    ([self defaultVideoQuality]) ? [RNCameraUtils captureSessionPresetForVideoResolution:[[self defaultVideoQuality] integerValue]] : AVCaptureSessionPresetHigh;
+    ([self defaultVideoQuality]) ? [RNCameraUtils captureSessionPresetForVideoResolution:(RNCameraVideoResolution)[[self defaultVideoQuality] integerValue]] : AVCaptureSessionPresetHigh;
 
     return preset;
 }
@@ -389,7 +389,7 @@ BOOL _sessionInterrupted = NO;
             [device setTorchMode:AVCaptureTorchModeOn];
         }];
     } else {
-        if (![device hasFlash] || ![device isFlashModeSupported:self.flashMode]) {
+        if (![device hasFlash] || ![device isFlashModeSupported:(AVCaptureFlashMode)self.flashMode]) {
             RCTLogWarn(@"%s: device doesn't support flash mode", __func__);
             return;
         }
@@ -398,7 +398,7 @@ BOOL _sessionInterrupted = NO;
             if ([device isTorchActive]) {
                 [device setTorchMode:AVCaptureTorchModeOff];
             }
-            [device setFlashMode:self.flashMode];
+            [device setFlashMode:(AVCaptureFlashMode)self.flashMode];
         }];
     }
 }
@@ -560,9 +560,9 @@ BOOL _sessionInterrupted = NO;
 - (void)updateFocusMode
 {
     AVCaptureDevice *device = [self.videoCaptureDeviceInput device];
-    if ([device isFocusModeSupported:self.autoFocus]) {
+    if ([device isFocusModeSupported:(AVCaptureFocusMode)self.autoFocus]) {
         [self lockDevice:device andApplySettings:^{
-            [device setFocusMode:self.autoFocus];
+            [device setFocusMode:(AVCaptureFocusMode)self.autoFocus];
         }];
     }
 }
@@ -610,7 +610,7 @@ BOOL _sessionInterrupted = NO;
             [device setWhiteBalanceMode:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance];
         } else {
             AVCaptureWhiteBalanceTemperatureAndTintValues temperatureAndTint = {
-                .temperature = [RNCameraUtils temperatureForWhiteBalance:self.whiteBalance],
+                .temperature = [RNCameraUtils temperatureForWhiteBalance:(RNCameraWhiteBalance)self.whiteBalance],
                 .tint = 0,
             };
             AVCaptureWhiteBalanceGains rgbGains = [device deviceWhiteBalanceGainsForTemperatureAndTintValues:temperatureAndTint];
@@ -760,7 +760,7 @@ BOOL _sessionInterrupted = NO;
     NSInteger orientation = [options[@"orientation"] integerValue];
 
     AVCaptureConnection *connection = [self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-    [connection setVideoOrientation:orientation];
+    [connection setVideoOrientation:(AVCaptureVideoOrientation)orientation];
     @try {
         [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler: ^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
             if (imageSampleBuffer && !error) {
@@ -1083,7 +1083,7 @@ BOOL _sessionInterrupted = NO;
             [connection setPreferredVideoStabilizationMode:self.videoStabilizationMode];
         }
     }
-    [connection setVideoOrientation:orientation];
+    [connection setVideoOrientation:(AVCaptureVideoOrientation)orientation];
 
     BOOL recordAudio = [options valueForKey:@"mute"] == nil || ([options valueForKey:@"mute"] != nil && ![options[@"mute"] boolValue]);
 

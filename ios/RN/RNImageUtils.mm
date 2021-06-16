@@ -95,7 +95,7 @@
 
 + (void)updatePhotoMetadata:(CMSampleBufferRef)imageSampleBuffer withAdditionalData:(NSDictionary *)additionalData inResponse:(NSMutableDictionary *)response
 {
-    CFDictionaryRef exifAttachments = CMGetAttachment(imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
+    CFDictionaryRef exifAttachments = (CFDictionaryRef)CMGetAttachment(imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
     NSMutableDictionary *metadata = (__bridge NSMutableDictionary *)exifAttachments;
     metadata[(NSString *)kCGImagePropertyExifPixelYDimension] = response[@"width"];
     metadata[(NSString *)kCGImagePropertyExifPixelXDimension] = response[@"height"];

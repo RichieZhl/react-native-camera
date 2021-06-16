@@ -14,7 +14,7 @@
 @interface RCTCameraManager ()
 
 @property (strong, nonatomic) RCTSensorOrientationChecker * sensorOrientationChecker;
-@property (assign, nonatomic) NSInteger* flashMode;
+@property (assign, nonatomic) NSInteger flashMode;
 
 @end
 
@@ -257,12 +257,12 @@ RCT_CUSTOM_VIEW_PROPERTY(flashMode, NSInteger, RCTCamera) {
         NSLog(@"%@", error);
         return;
     }
-    if (device.hasFlash && [device isFlashModeSupported:self.flashMode])
+    if (device.hasFlash && [device isFlashModeSupported:(AVCaptureFlashMode)self.flashMode])
     {
         NSError *error = nil;
         if ([device lockForConfiguration:&error])
         {
-            [device setFlashMode:self.flashMode];
+            [device setFlashMode:(AVCaptureFlashMode)self.flashMode];
             [device unlockForConfiguration];
         }
         else
@@ -275,7 +275,7 @@ RCT_CUSTOM_VIEW_PROPERTY(flashMode, NSInteger, RCTCamera) {
 
 RCT_CUSTOM_VIEW_PROPERTY(torchMode, NSInteger, RCTCamera) {
   dispatch_async(self.sessionQueue, ^{
-    NSInteger *torchMode = [RCTConvert NSInteger:json];
+    NSInteger torchMode = [RCTConvert NSInteger:json];
     AVCaptureDevice *device = [self.videoCaptureDeviceInput device];
     NSError *error = nil;
 
@@ -284,7 +284,7 @@ RCT_CUSTOM_VIEW_PROPERTY(torchMode, NSInteger, RCTCamera) {
       NSLog(@"%@", error);
       return;
     }
-    [device setTorchMode: torchMode];
+    [device setTorchMode: (AVCaptureTorchMode)torchMode];
     [device unlockForConfiguration];
   });
 }
@@ -558,7 +558,7 @@ RCT_EXPORT_METHOD(setZoom:(CGFloat)zoomFactor) {
       captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
     }
     else if (type == AVMediaTypeVideo) {
-      captureDevice = [self deviceWithMediaType:AVMediaTypeVideo preferringPosition:self.presetCamera];
+      captureDevice = [self deviceWithMediaType:AVMediaTypeVideo preferringPosition:(AVCaptureDevicePosition)self.presetCamera];
     }
 
     if (captureDevice == nil) {
@@ -598,7 +598,7 @@ RCT_EXPORT_METHOD(setZoom:(CGFloat)zoomFactor) {
 
 - (void)captureStill:(NSInteger)target options:(NSDictionary *)options resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject
 {
-    AVCaptureVideoOrientation orientation = options[@"orientation"] != nil ? [options[@"orientation"] integerValue] : self.orientation;
+    AVCaptureVideoOrientation orientation = (AVCaptureVideoOrientation)(options[@"orientation"] != nil ? [options[@"orientation"] integerValue] : self.orientation);
     if (orientation == RCTCameraOrientationAuto) {
         #if TARGET_IPHONE_SIMULATOR
             [self captureStill:target options:options orientation:self.previewLayer.connection.videoOrientation resolve:resolve reject:reject];
@@ -820,7 +820,7 @@ RCT_EXPORT_METHOD(setZoom:(CGFloat)zoomFactor) {
 
 -(void)captureVideo:(NSInteger)target options:(NSDictionary *)options resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject
 {
-    AVCaptureVideoOrientation orientation = options[@"orientation"] != nil ? [options[@"orientation"] integerValue] : self.orientation;
+    AVCaptureVideoOrientation orientation = (AVCaptureVideoOrientation)(options[@"orientation"] != nil ? [options[@"orientation"] integerValue] : self.orientation);
     if (orientation == RCTCameraOrientationAuto) {
         [self.sensorOrientationChecker getDeviceOrientationWithBlock:^(UIInterfaceOrientation orientation) {
             [self captureVideo:target options:options orientation:[self.sensorOrientationChecker convertToAVCaptureVideoOrientation: orientation] resolve:resolve reject:reject];
